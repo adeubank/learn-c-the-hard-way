@@ -1,3 +1,3 @@
-Learn C The Hard Way
+#Learn C The Hard Way
 
-http://c.learncodethehardway.org/book/learn-c-the-hard-waych2.html 
+[See the book here](http://c.learncodethehardway.org/book/)
