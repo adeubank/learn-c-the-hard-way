@@ -12,15 +12,13 @@ int main(int argc, char *argv[])
 
     // let's make our own array of strings
     char *states[] = {
-        "California", "Oregon", "Washington", "Texas"
+        "California", "Oregon", "Washington", "Texas", NULL
     };
-    int num_states = 4;
+    int num_states = 5;
 
     for(i = 0; i < num_states; i++) {
         printf("state %d: %s\n", i, states[i]);
     }
-
-    /* Continue with extra credit read what null is */
 
     return 0;
 }
