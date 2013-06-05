@@ -1,8 +1,10 @@
+/* import utility functions */
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
+// Define a struct that has a string, and 3 ints.
 struct Person {
   char *name;
   int age;
@@ -12,10 +14,11 @@ struct Person {
 
 struct Person *Person_create(char *name, int age, int height, int weight)
 {
+  // Grab a block of memory the size of the person struct
   struct Person *who = malloc(sizeof(struct Person));
-  assert(who != NULL);
+  assert(who != NULL); // Exit if memory block is bad
 
-  who->name = strdup(name);
+  who->name = strdup(name); // Duplicate and copy  name
   who->age = age;
   who->height = height;
   who->weight = weight;
