@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
   /*Person_print(NULL);*/
 
   // EXTRA CREDIT
-  printf("Size of Person struct: %l\n", sizeof(struct Person));
+  printf("Size of Person struct: %lu\n", sizeof(struct Person));
 
   // Return 0 to operating system and exit
   return 0;
