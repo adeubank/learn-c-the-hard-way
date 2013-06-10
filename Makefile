@@ -1,7 +1,17 @@
-CC=g++
-CFLAGS=-Wall -g
+CC := gcc
+CFLAGS := -Wall -g -std=c99 $(DEFS)
 
-all: *.c
+ex := $(patsubst %.c,%,$(wildcard ex*.c))
+obj := $(patsubst %.c,%.o,$(wildcard *.c))
+
+all: $(ex)
 
 clean:
-	rm -f ex*.o
+	rm -f $(ex)
+	rm -f $(obj)
+	rm -fR *.dSYM
+
+# Generate dependencies automatically
+include $(obj:.o=.d)
+%.d: %.c
+	$(CC) -MM $(CPPFLAGS) $< | sed 's|$*\.o[ :]*|$*.o $*.d: |g' > $@
