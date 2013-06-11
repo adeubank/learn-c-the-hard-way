@@ -1,4 +1,8 @@
-/* Exercise 17: Heap and Stack Memory Allocation */
+/* Exercise 17: Heap and Stack Memory Allocation 
+ *
+ * credit to https://github.com/larryv for solving the extra credit portion
+ * */
+
 #include <stdio.h> // Importing utility libraries
 #include <assert.h>
 #include <stdlib.h>
@@ -71,19 +75,25 @@ void Database_load(void)
   if (!db->rows) die("Memory error.");
 
   for (addr = db->rows; addr < db->rows + db->max_rows; ++addr) {
-    if (fread(&addr->id, sizeof(addr->id), 1, conn.file) != 1)
-      die("Failed to load database.");
-    if (fread(&addr->set, sizeof(addr->set), 1, conn.file) != 1)
-      die("Failed to load database.");
+
+    if (fread(&addr->id, sizeof(addr->id), 1, conn.file) != 1) {
+      die("Failed to load database. id");
+    }
+    if (fread(&addr->set, sizeof(addr->set), 1, conn.file) != 1) {
+      die("Failed to load database. set");
+    }
 
     addr->name = malloc(db->max_data);
     if (!addr->name) die("Memory error.");
-    if (fread(addr->name, db->max_data, 1, conn.file) != 1)
-      die("Failed to load database.");
+    if (fread(addr->name, db->max_data, 1, conn.file) != 1) {
+      die("Failed to load database. name");
+    }
 
     addr->email = malloc(db->max_data);
-    if (fread(addr->email, db->max_data, 1, conn.file) != 1)
-      die("Failed to load database.");
+    if (!addr->email) die("Memory error.");
+    if (fread(addr->email, db->max_data, 1, conn.file) != 1) {
+      die("Failed to load database. email");
+    }
   }
 }
 
@@ -98,9 +108,7 @@ void Database_open(const char *filename, char mode)
   } else {
     conn.file = fopen(filename, "r+");
     
-    if(conn.file) {
-      Database_load();
-    }
+    if(conn.file) Database_load();
   }
 
   if(!conn.file) die("Failed to open the file");
@@ -145,8 +153,8 @@ void Database_write()
   for(addr = db->rows; addr < db->rows + db->max_rows; ++addr)
     if (fwrite(&addr->id, sizeof(addr->id), 1, conn.file) != 1 ||
           fwrite(&addr->set, sizeof(addr->set), 1, conn.file) != 1 ||
-          fwrite(&addr->name, db->max_data, 1, conn.file) != 1 ||
-          fwrite(&addr->email, db->max_data, 1, conn.file) != 1)
+          fwrite(addr->name, db->max_data, 1, conn.file) != 1 ||
+          fwrite(addr->email, db->max_data, 1, conn.file) != 1)
       die("Failed to write database.");
 
   // Flush the file stream
@@ -154,11 +162,14 @@ void Database_write()
 }
 
 // Create an empty database
-void Database_create(long max_rows, long max_data)
+void Database_create(long max_data, long max_rows)
 {
   int i = 0;
   struct Database *db = conn.db;
   struct Address *addr;
+
+  db->max_rows = max_rows;
+  db->max_data = max_data;
 
   db->rows = malloc(db->max_rows * sizeof(struct Address));
   if (!db->rows) die("Memory error.");
@@ -197,6 +208,7 @@ void Database_set(int id, const char *name, const char *email)
   res = strncpy(addr->email, email, db->max_data);
   if(!res) die("Email copy failed.");
   res[db->max_data-1] = '\0';
+
 }
 
 // Read an address from the Database
@@ -239,6 +251,19 @@ void Database_list()
   }
 }
 
+// Searches databases attributes
+void Database_find(const char *string)
+{
+  struct Database *db = conn.db;
+  struct Address *addr;
+  int match;
+
+  for(addr = db->rows; addr < db->rows + db->max_rows; ++addr) {
+    match = strstr(addr->name, string) || strstr(addr->email, string);
+    if (addr->set && match) Address_print(addr);
+  }
+}
+
 int is_valid_ref(char *);
 int is_valid_range(const char *);
 
@@ -264,18 +289,17 @@ int main(int argc, char *argv[])
 
       case 'g': /* g and d have the same requirements */
       case 'd':
-        if (strchr(argv[4], '-')) {
+        if (strchr(argv[3], '-')) {
           if (!is_valid_range(argv[3]))
             die("Invalid id range.");
           sscanf(argv[3], "%ld-%ld", &id_start, &id_end);
         } else {
           if (!is_valid_ref(argv[3]))
-            die("Invliad id");
-          id_start = id_end = strol(argv[3], NULL, 10);
+            die("Invalid id");
+          id_start = id_end = strtol(argv[3], NULL, 10);
         }
         id_start = MAX(id_start, 0);
         id_end = MIN(id_end, conn.db->max_rows);
-
         break;
       case 's':
         if (!is_valid_ref(argv[3]))
@@ -339,3 +363,19 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+/* Check if arg contains only digits 0-9 */
+int is_valid_ref(char *arg)
+{
+  do {
+    if (!isdigit(*arg)) return 0;
+  } while (*++arg);
+  return 1;
+}
+
+/* Check if range argument passed in is valid */
+int is_valid_range(const char *arg)
+{
+  long a, b;
+  if (sscanf(arg, "%ld-%ld", &a, &b) != 2 || a > b) return 0;
+  return 1;
+}
