@@ -4,6 +4,7 @@
 #include <string.h>
 #include <assert.h>
 
+void print_array(int *numbers, int count);
 /** Our old friend die from ex17. */
 void die(const char *message)
 {
@@ -49,6 +50,26 @@ int *bubble_sort(int *numbers, int count, compare_cb cmp)
   return target;
 }
 
+/* classic merge sort */
+/*int *merge_sort(int *numbers, int count, compare_cb cmp)*/
+/*{*/
+  /*if (count <= 1) return numbers;*/
+
+  /*int *target; */
+  
+  /*if (!(target = malloc(count * sizeof(int))))*/
+    /*die("Memory error.");*/
+  /*memcpy(target, numbers, count * sizeof(int));*/
+
+  /*int *left;*/
+  /*int *right;*/
+
+    /*if (!(left = malloc(*/
+
+
+  /*return target;*/
+/*}*/
+
 /* Heapsort implementation from CLRS, 3rd ed. */
 
 /* Heap primitives */
@@ -75,6 +96,7 @@ int max_heapify(struct Heap *A, size_t i, compare_cb cmp)
   l = LEFT(i);
   r = RIGHT(i);
   largest = (l < A->heap_sz && cmp(A->array[l], A->array[i]) > 0) ? l : i;
+
   if (r < A->heap_sz && cmp(A->array[r], A->array[largest]) > 0)
     largest = r;
   if (largest != i) {
@@ -102,8 +124,9 @@ struct Heap *build_max_heap(int *input, size_t len, compare_cb cmp)
 
   A->array = input;
   A->heap_sz = A->len = len;
-  for (i = A->len / 2 - 1; i >= 0; --i)
+  for (i = A->len / 2 - 1; i >= 1; --i) {
     max_heapify(A, i, cmp);
+  }
 
   return A;
 }
@@ -120,7 +143,7 @@ int *heap_sort(int *numbers, int count, compare_cb cmp)
   memcpy(target, numbers, count * sizeof(int));
 
   A = build_max_heap(target, count, cmp);
-  for (i = A->len - 1; i > 0; --i) {
+  for (i = A->len - 1; i > 1; --i) {
     tmp = A->array[0];
     A->array[0] = A->array[i];
     A->array[i] = tmp;
@@ -198,10 +221,15 @@ int main(int argc, char *argv[])
   test_sorting(numbers, count, reverse_order, bubble_sort);
   test_sorting(numbers, count, strange_order, bubble_sort);
 
+  /*printf("Merge sort\n");*/
+  /*test_sorting(numbers, count, sorted_order, merge_sort);*/
+  /*test_sorting(numbers, count, reverse_order, merge_sort);*/
+  /*test_sorting(numbers, count, strange_order, merge_sort);*/
+
   printf("Heap sort\n");
   test_sorting(numbers, count, sorted_order, heap_sort);
-  /*test_sorting(numbers, count, reverse_order, heap_sort);*/
-  /*test_sorting(numbers, count, strange_order, heap_sort);*/
+  test_sorting(numbers, count, reverse_order, heap_sort);
+  test_sorting(numbers, count, strange_order, heap_sort);
 
   free(numbers);
 
