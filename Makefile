@@ -7,6 +7,8 @@ dep := $(obj:.o=.d)
 
 all: $(ex) -o $(ex).o
 
+ex19: object.o
+
 clean:
 	rm -f $(ex)
 	rm -f $(obj)
