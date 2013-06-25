@@ -17,6 +17,7 @@ void Object_destroy(void *self)
 void Object_describe(void *self)
 {
   Object *obj = self;
+
   printf("%s.\n", obj->description);
 }
 
@@ -53,6 +54,7 @@ void *Object_new(size_t size, Object proto, char *description)
   *el = proto;
 
   // copy the description oever
+  assert(description != NULL);
   el->description = strdup(description);
 
   // initialize it with whatever init we were given
