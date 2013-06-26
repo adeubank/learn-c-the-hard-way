@@ -14,6 +14,7 @@ clean:
 	rm -f $(obj)
 	rm -fR *.dSYM
 	rm -fR $(dep)
+	rm -f *.dat
 
 # Generate dependencies automatically
 include $(obj:.o=.d)
