@@ -147,7 +147,7 @@ int process_input(Map *game)
   printf("\n> ");
 
   char ch = getchar();
-  getchar(); // eat ENTER
+  do { } while(getchar()); // eat everything but the first char
 
   int damage = rand() % 4;
 
@@ -187,6 +187,8 @@ int process_input(Map *game)
 
     default:
       printf("What?: %d\n", ch);
+      printf("USAGE: l a n e w s\n");
+      break;
   }
 
   return 1;
