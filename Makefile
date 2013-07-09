@@ -5,7 +5,7 @@ ex := $(patsubst %.c,%,$(wildcard ex*.c))
 obj := $(patsubst %.c,%.o,$(wildcard *.c))
 dep := $(obj:.o=.d)
 
-all: $(ex) -o $(ex).o
+all: $(ex)
 
 ex19: object.o
 
