@@ -19,7 +19,7 @@ int Shell_exec(Shell template, ...)
 
   for(key = va_arg(argp, const char *);
       key != NULL;
-      key = va_arg(argp, const char *));
+      key = va_arg(argp, const char *))
   {
     arg = va_arg(argp, const char *);
 
