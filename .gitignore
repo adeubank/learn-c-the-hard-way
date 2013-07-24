@@ -22,3 +22,8 @@
 
 # Database files
 *.dat
+
+.vagrant/machines/default/virtualbox/id
+.vagrant/**/*
+.vagrant
+Vagrantfile
