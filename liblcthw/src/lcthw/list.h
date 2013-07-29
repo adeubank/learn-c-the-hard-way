@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 struct ListNode;
+struct List;
 
 typedef struct ListNode {
   struct ListNode *next;
