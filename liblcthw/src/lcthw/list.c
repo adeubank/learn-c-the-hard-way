@@ -31,6 +31,9 @@ void List_clear_destroy(List *list)
   List_destroy(list);
 }
 
+/*
+ * Add node to end of list.
+ */
 void List_push(List *list, void *value)
 {
   ListNode *node = calloc(1, sizeof(ListNode));
@@ -54,12 +57,18 @@ error:
   return;
 }
 
+/*
+ * Remove the last node in the list and return removed nodes value.
+ */
 void *List_pop(List *list)
 {
   ListNode *node = list->last;
   return node != NULL ? List_remove(list, node) : NULL;
 }
 
+/*
+ * Add node to beginning of list.
+ */
 void List_unshift(List *list, void *value)
 {
   ListNode *node = calloc(1, sizeof(ListNode));
@@ -83,12 +92,18 @@ error:
   return;
 }
 
+/*
+ * Remove the first node in the list and return the nodes value.
+ */
 void *List_shift(List *list)
 {
   ListNode *node = list->first;
   return node != NULL ? List_remove(list, node) : NULL;
 }
 
+/*
+ * Remove target node from list and return the removed nodes value.
+ */
 void *List_remove(List *list, ListNode *node)
 {
   void *result = NULL;

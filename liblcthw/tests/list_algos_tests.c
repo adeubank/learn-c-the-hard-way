@@ -5,6 +5,7 @@
 #include <string.h>
 
 char *values[] = {"XXXX", "1234", "abcd", "xjvef", "NDSS"};
+/*char *values[] = {"5", "4", "3", "2", "1"};*/
 #define NUM_VALUES 5
 
 List *create_words()
@@ -61,21 +62,23 @@ char *test_merge_sort()
   List *words = create_words();
 
   // should work on a list that needs sorting
-  int rc = List_merge_sort(words, (List_compare)strcmp);
-  mu_assert(is_sorted(words), "Words are not sorted after merge sort.");
+  List *res = List_merge_sort(words, (List_compare)strcmp);
+  mu_assert(is_sorted(res), "Words are not sorted after merge sort.");
 
   // should work on an already sorted list
-  rc = List_merge_sort(words, (List_compare)strcmp);
-  mu_assert(is_sorted(words), "Should still be sorted after merge sort.");
+  List *res2 = List_merge_sort(res, (List_compare)strcmp);
+  mu_assert(is_sorted(res2), "Should still be sorted after merge sort.");
 
   List_destroy(words);
+  List_destroy(res);
+  List_destroy(res2);
   
   // should work on an empty list
   words = List_create();
-  rc = List_merge_sort(words, (List_compare)strcmp);
-  mu_assert(rc == 0, "Merge sort failed on empty list.");
-  mu_assert(is_sorted(words), "Words should be sorted if empty.");
+  res = List_merge_sort(words, (List_compare)strcmp);
+  mu_assert(is_sorted(res), "Words should be sorted if empty.");
 
+  List_destroy(words);
   return NULL;
 }
 
